@@ -44,3 +44,13 @@ Here’s what you're required to implement to bring the game to life:
 These are the minimum requirements, but if you'd like an additional challenge go ahead and give the LevelUps a shot! For example, you can set up logic to make some of the drops "bad" drops that remove points if the user click them, complete with a different color to distinguish them from "good" drops. Have fun and make the game your own!
 
 If you have any questions or need any assistance with your code, reach out to the HelpHub or attend a Drop-In Hour. You got this!!
+
+## Difficulty Modes
+
+This game includes three difficulty modes: Easy, Normal, and Hard. Select the difficulty from the dropdown before starting a game. Each mode changes several gameplay parameters:
+
+- Easy: 45 seconds, slower drops, fewer dirty drops, smaller penalties. Good for learning and casual play.
+- Normal: 30 seconds, balanced pace and penalties. Default mode.
+- Hard: 20 seconds, faster drops, more dirty drops, larger penalties. For a tougher challenge.
+
+Try each mode to see how the goal score and pacing change. Your selected difficulty is saved in localStorage so it will be remembered on your next visit.

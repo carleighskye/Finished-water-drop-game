@@ -35,7 +35,7 @@ body {
     align-items: flex-start; /* align to top so fixed logo doesn't overlap */
     min-height: 100vh;
     background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
+    font-family: 'Montserrat', Arial, sans-serif;
 }
 
 /* spacer to create breathing room at top of page */
@@ -88,6 +88,24 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
+.controls-row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+select#difficulty-select{
+    padding:6px 8px;
+    border-radius:6px;
+    border:1px solid rgba(0,0,0,0.08);
+    background:#fff;
+    font-weight:700;
+    color:#333;
+    cursor:pointer;
+}
+
+.visually-hidden{ position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px, 1px, 1px, 1px); white-space: nowrap; }
 
 .timer {
     flex: 0 1 auto;
@@ -339,6 +357,45 @@ body {
     min-width: 180px;
     text-align: right;
 }
+
+.game-message.milestone{
+    color: #159A48;
+    background: rgba(21,154,72,0.08);
+    padding: 6px 10px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(21,154,72,0.06);
+    transition: transform 180ms ease, opacity 180ms ease;
+}
+
+/* Highscore display */
+.highscore{ font-size:14px; color:#444; margin-left:8px }
+.highscore strong{ color:#159A48 }
+
+/* Footer */
+.site-footer{
+    width:100%;
+    background:#ffffff;
+    border-top:1px solid rgba(0,0,0,0.04);
+    padding:14px 0;
+    position:fixed;
+    bottom:0;
+    left:0;
+    display:flex;
+    justify-content:center;
+    z-index:20;
+}
+.footer-inner{ max-width:920px; padding:0 14px; text-align:center; color:#555 }
+.footer-inner a{ color:#2E9DF7; font-weight:700 }
+
+/* hide footer during play on small screens */
+.site-footer.hidden{ transform: translateY(110%); transition: transform 220ms ease; }
+
+@media (min-width: 720px){
+    /* keep footer visible on wider screens during play */
+    .site-footer.hidden{ transform: none; }
+}
+
+/* layout above footer is handled dynamically in JS */
 
 .game-title {
     color: #131313;

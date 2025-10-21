@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Water Drop Game</title>
+    <!-- Use a font similar to charity: water brand (Montserrat used as a close alternative) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,7 +19,16 @@
         <div class="score-panel">
             <div class="score">Score: <span id="score">0</span></div>
             <div class="timer">Time: <span id="time">30</span>s</div>
-            <button id="start-btn">Start Game</button>
+            <div class="highscore">Highscore (<span id="hs-diff">Normal</span>): <strong id="highscore">0</strong></div>
+            <div class="controls-row">
+                <label for="difficulty-select" class="visually-hidden">Difficulty</label>
+                <select id="difficulty-select" aria-label="Choose difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="normal" selected>Normal</option>
+                    <option value="hard">Hard</option>
+                </select>
+                <button id="start-btn">Start Game</button>
+            </div>
             <div id="game-message" class="game-message" aria-live="polite"></div>
         </div>
         
@@ -42,11 +53,14 @@
         <div id="how-modal" class="modal" aria-hidden="true">
             <div class="modal-content" role="dialog" aria-modal="true">
                 <h2>How to play</h2>
+                <p>Tap clean (blue) drops to collect points. Avoid dirty (yellow) drops 3 they cost points and time. The game length, pace, and penalties depend on the chosen difficulty.</p>
+                <h3>Difficulty modes</h3>
                 <ul>
-                    <li>Tap good (blue) drops to collect +1 point.</li>
-                    <li>Avoid yellow drops — they deduct 1 point and 2 seconds.</li>
-                    <li>Collect as many as you can before time runs out.</li>
+                    <li><strong>Easy</strong> — More time (45s), slower drops, fewer dirty drops. Great for learning.</li>
+                    <li><strong>Normal</strong> — Default game experience (30s). Balanced spawn rate and penalties.</li>
+                    <li><strong>Hard</strong> — Less time (20s), faster drops, and more dirty drops. For challenge-seekers.</li>
                 </ul>
+                <p>Each mode also has a goal score indicated internally; try to beat the goal for a winning message!</p>
                 <div class="modal-actions">
                     <button id="how-close" class="btn btn-secondary">Close</button>
                 </div>
@@ -56,4 +70,14 @@
     
     <script src="script.js"></script>
 </body>
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <p>Learn more about charity: water or donate to bring clean water to communities around the world.</p>
+            <p>
+                <a href="https://www.charitywater.org" target="_blank" rel="noopener">charity: water home</a>
+                &nbsp;•&nbsp;
+                <a href="https://www.charitywater.org/donate" target="_blank" rel="noopener">Donate</a>
+            </p>
+        </div>
+    </footer>
 </html>
