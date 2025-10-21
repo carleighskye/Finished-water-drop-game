@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Drop Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-wrapper">
+        <h1 class="game-title">Water Drop</h1>
+        <p class="game-tagline">Catch the good drops, avoid the bad ones!</p>
+        <a href="https://www.charitywater.org" target="_blank" rel="noopener" aria-label="charity water website">
+            <img src="img/cw_logo-horizontal.png" alt="charity: water" class="top-left-logo">
+        </a>
+        <button id="how-btn" class="how-btn" aria-haspopup="dialog" aria-controls="how-modal">How to play</button>
+        <div class="score-panel">
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="timer">Time: <span id="time">30</span>s</div>
+            <button id="start-btn">Start Game</button>
+            <div id="game-message" class="game-message" aria-live="polite"></div>
+        </div>
+        
+        <div id="game-container">
+            <!-- floating feedback container for +1 etc. -->
+            <div id="feedback-layer" aria-hidden="true"></div>
+        </div>
+        <!-- End game modal -->
+        <div id="end-modal" class="modal" aria-hidden="true">
+            <div class="modal-content" role="dialog" aria-modal="true">
+                <h2>Time's up!</h2>
+                <p>Your final score: <strong id="final-score">0</strong></p>
+                <div class="modal-actions">
+                    <button id="replay-btn" class="btn">Play Again</button>
+                    <button id="close-btn" class="btn btn-secondary">Close</button>
+                </div>
+            </div>
+        </div>
+        <!-- confetti canvas -->
+        <canvas id="confetti-canvas" aria-hidden="true"></canvas>
+        <!-- How to play modal -->
+        <div id="how-modal" class="modal" aria-hidden="true">
+            <div class="modal-content" role="dialog" aria-modal="true">
+                <h2>How to play</h2>
+                <ul>
+                    <li>Tap good (blue) drops to collect +1 point.</li>
+                    <li>Avoid yellow drops — they deduct 1 point and 2 seconds.</li>
+                    <li>Collect as many as you can before time runs out.</li>
+                </ul>
+                <div class="modal-actions">
+                    <button id="how-close" class="btn btn-secondary">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

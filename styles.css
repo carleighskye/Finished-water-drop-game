@@ -1,0 +1,387 @@
+/* Charity: water Brand Colors & Fonts
+
+Primary Colors:
+- Yellow:     #FFC907
+- Blue:       #2E9DF7
+
+Secondary Colors:
+- Light Blue: #8BD1CB
+- Green:      #4FCB53
+- Orange:     #FF902A
+- Red:        #F5402C
+- Dark Green: #159A48
+- Pink:       #F16061
+
+Fonts:
+- Proxima Nova
+- Avenir
+
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden; /* prevent scrolling so gameplay always fits */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* align to top so fixed logo doesn't overlap */
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+/* spacer to create breathing room at top of page */
+.top-spacer{ height: 36px }
+
+/* Top-left charity logo shown on every page */
+.top-left-logo{
+    position: fixed;
+    left: 12px;
+    top: 12px;
+    height: 38px;
+    width: auto;
+    z-index: 40;
+}
+
+/* how-to-play button top-right */
+.how-btn{
+    position: fixed;
+    right: 14px;
+    top: 12px;
+    z-index: 41;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.08);
+    padding: 8px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.how-btn:hover{ background:#f6f6f6 }
+
+.game-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    max-width: 920px;
+    padding-top: 16px; /* small padding so logo doesn't overlap */
+}
+
+.score-panel {
+    display: flex;
+    justify-content: center;  /* center score, timer, and button */
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    width: 720px;
+    padding: 10px 14px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.timer {
+    flex: 0 1 auto;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#game-container {
+    width: min(95vw, 720px);
+    /* fit the remaining viewport height below the header/controls */
+    height: calc(100vh - 180px);
+    max-height: 820px;
+    background-color: #e6f7ff;
+    border: 2px solid #333;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.partner{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+.partner-text{font-size:12px;color:#777}
+.partner-logo{height:28px;width:auto}
+
+/* modal styles */
+.modal{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.45);
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 180ms ease, visibility 180ms ease;
+}
+.confetti-canvas{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 60;
+}
+.modal[aria-hidden="false"]{ visibility: visible; opacity: 1 }
+.modal-content{
+    background:#fff;padding:20px;border-radius:10px;min-width:260px;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,0.2)
+}
+.how-modal .modal-content, #how-modal .modal-content{
+    padding-left: 40px; /* extra left space for bullet text */
+    padding-right: 36px;
+    text-align: left; /* keep list readable */
+}
+.modal-actions{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.btn{padding:8px 14px;border-radius:6px;border:none;background:#2E9DF7;color:#fff;cursor:pointer}
+.btn-secondary{background:#ccc;color:#333}
+
+/* Slightly smaller drops to fit the reduced area */
+.water-drop{ width:52px;height:52px }
+
+
+/* Theme variables */
+:root{
+    --can-color: #FFD54F; /* yellow can */
+    --can-hit-color: #FF902A; /* hit flash */
+    --score-flash: #4FCB53;
+}
+
+.can {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    background-color: var(--can-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 150ms ease, background-color 150ms ease, opacity 200ms ease;
+    touch-action: manipulation; /* improve mobile tap */
+}
+
+.can:active {
+    transform: scale(0.95);
+}
+
+.can.collected {
+    transform: scale(1.2) rotate(-15deg) translateY(-10px);
+    opacity: 0;
+    background-color: var(--can-hit-color);
+}
+
+/* Floating +1 feedback */
+#feedback-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* allow clicks to pass through */
+}
+
+.pop {
+    position: absolute;
+    color: var(--score-flash);
+    font-weight: 700;
+    font-size: 18px;
+    transform: translateY(0);
+    animation: popUp 700ms ease forwards;
+}
+
+@keyframes popUp {
+    0% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-40px) scale(1.2); }
+}
+
+/* flash the score when updated */
+.score.flash {
+    animation: scoreFlash 400ms ease;
+}
+
+@keyframes scoreFlash {
+    0% { color: #333; transform: scale(1); }
+    50% { color: var(--score-flash); transform: scale(1.08); }
+    100% { color: #333; transform: scale(1); }
+}
+
+/* red glow for penalties */
+.score.penalty{
+    animation: scorePenalty 500ms ease;
+}
+
+@keyframes scorePenalty{
+    0% { color: #333; text-shadow: none; transform: scale(1); }
+    30% { color: #F5402C; text-shadow: 0 0 8px rgba(245,64,44,0.9), 0 0 18px rgba(245,64,44,0.6); transform: scale(1.06); }
+    100% { color: #333; text-shadow: none; transform: scale(1); }
+}
+
+
+#start-btn {
+    padding: 8px 16px;
+    background-color: #159A48;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#start-btn:hover {
+    background-color: #13823d;
+}
+
+.score {
+    flex: 0 1 auto;  /* Don't grow, can shrink, auto basis */
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.timer{ text-align: center; }
+
+.water-drop {
+    position: absolute;
+    width: 60px;  /* visual size */
+    height: 60px;
+    /* make base transparent — shape comes from pseudo elements */
+    background: transparent;
+    /* rounded teardrop-like border radius to help the shape */
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: dropFall linear forwards;
+    transform-origin: center;
+    cursor: pointer;
+    padding: 0;  /* no extra padding so pseudo covers full area */
+    margin: 0;
+    transition: transform 0.12s ease;  /* Smooth hover effect */
+}
+
+.water-drop:hover {
+    transform: scale(1.08);  /* Slight grow effect on hover */
+}
+
+.bad-drop {
+    background-color: #ff4444;
+}
+
+/* Good drop (clean water) */
+.good-drop {
+    position: relative;
+}
+
+/* Create a teardrop look with a pseudo-element for shine and gradient */
+.good-drop::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.12) 18%, rgba(255,255,255,0) 40%), linear-gradient(180deg,#2E9DF7 0%, #1B7FD9 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: 0 8px 14px rgba(46,157,247,0.18), inset 0 -6px 10px rgba(0,0,0,0.06);
+    transform: rotate(18deg);
+}
+
+/* Dirty (bad) drop - clickable penalty */
+.dirty-drop {
+    position: relative;
+}
+
+.dirty-drop::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0) 35%), linear-gradient(180deg,#FFC907 0%, #E6A500 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.36), inset 0 -6px 12px rgba(0,0,0,0.24);
+    transform: rotate(16deg);
+}
+
+.penalty {
+    animation: penaltyFlash 350ms ease;
+}
+
+@keyframes penaltyFlash {
+    0% { transform: scale(1); filter: hue-rotate(0deg); }
+    50% { transform: scale(1.06); filter: hue-rotate(-30deg); }
+    100% { transform: scale(1); filter: none; }
+}
+
+.game-message {
+    margin-left: 12px;
+    font-weight: 700;
+    color: #333;
+    min-width: 180px;
+    text-align: right;
+}
+
+.game-title {
+    color: #131313;
+    font-size: 48px;
+    margin-top: 0;
+    margin-bottom: 5px;  /* reduced from 20px */
+    text-align: center;
+}
+
+.game-tagline {
+    color: #666;
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+@keyframes dropFall {
+    from {
+        transform: translateY(-20px);
+    }
+    to {
+        transform: translateY(600px);
+    }
+}
+
+@media (max-width: 850px) {
+    .game-wrapper, .score-panel, #game-container {
+        width: 95vw;
+    }
+
+    #game-container {
+        height: calc(100vh - 120px);
+    }
+
+    /* For very short screens (phones in landscape), clamp height more */
+    @media (max-height: 600px) {
+        #game-container { height: calc(100vh - 110px); }
+    }
+
+    .can {
+        width: 56px;
+        height: 56px;
+        font-size: 14px;
+    }
+    .top-left-logo{ height:28px; left:10px; top:8px }
+}
